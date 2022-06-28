@@ -7,9 +7,10 @@ name = "pybuild-header-dependency"
 authors = [{name = "Tony Xiang", email="tonyxiang@live.nl"}]
 description = "Helper package to resolve C/C++ header-only libraries for Python build with native extensions"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = {text = "BSD License (BSD)"}
 classifiers = [
     "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License"
 ]
 requires-python = ">=3.7"
 dependencies = [
