@@ -2,7 +2,7 @@ import shutil
 import tarfile
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Type
 
 import requests
 
@@ -15,23 +15,17 @@ class PackageDownloader(ABC):
     # name of the package, to be overridden
     name: str
     # dict of all packages
-    all_pkgs: Dict[str, "PackageDownloader"] = {}
+    all_downloaders: Dict[str, Type["PackageDownloader"]] = {}
+
+    # all versions, latest at first
+    all_versions: List[str]
 
     def __init_subclass__(cls, **kwargs):
         if "name" in dir(cls):
-            PackageDownloader.all_pkgs[cls.name] = cls()
+            PackageDownloader.all_downloaders[cls.name] = cls
 
-    @abstractmethod
     def get_latest_version(self) -> str:
-        pass
-
-    @abstractmethod
-    def all_versions(self) -> List[str]:
-        pass
-
-    @abstractmethod
-    def download(self, version: str, base_dir: Path):
-        pass
+        return self.all_versions[0]
 
     def check_version(self, version: str):
         if version not in self.all_versions():
@@ -44,3 +38,7 @@ class PackageDownloader(ABC):
         tf.extractall(base_dir / "pkgs")
         for file in include_files:
             shutil.copytree(base_dir / "pkgs" / include_base_dir / file, base_dir / "include" / file)
+
+    @abstractmethod
+    def download(self, version: str, base_dir: Path):
+        pass

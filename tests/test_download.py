@@ -9,3 +9,5 @@ def test_all_pkgs():
 
     # test boost
     assert (include / "boost").exists()
+    # test eigen
+    assert (include / "Eigen").exists()

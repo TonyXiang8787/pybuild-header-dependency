@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 import requests
 
@@ -11,8 +10,11 @@ class Boost(PackageDownloader):
     release_url = "https://boostorg.jfrog.io/artifactory/api/storage/main/release"
     file_base_url = "https://boostorg.jfrog.io/artifactory/main/release"
 
-    def get_latest_version(self):
-        return self.all_versions()[-1]
+    def __init__(self):
+        response = requests.get(self.release_url)
+        response.raise_for_status()
+        self.all_versions = [x["uri"].split("/")[1] for x in response.json()["children"]]
+        self.all_versions.reverse()
 
     def download(self, version: str, base_dir: Path):
         version_underscore = version.replace(".", "_")
@@ -25,8 +27,3 @@ class Boost(PackageDownloader):
             include_base_dir=Path(f"boost_{version_underscore}"),
             include_files=[Path("boost")],
         )
-
-    def all_versions(self) -> List[str]:
-        response = requests.get(self.release_url)
-        response.raise_for_status()
-        return [x["uri"].split("/")[1] for x in response.json()["children"]]

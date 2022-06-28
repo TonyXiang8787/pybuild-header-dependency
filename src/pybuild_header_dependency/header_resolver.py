@@ -12,15 +12,17 @@ from .pkg_path import DEFAULT_PKG_PATH
 class HeaderResolver:
     pkg_path: Path
     pkgs: Dict[str, Optional[str]]
+    downloaders: Dict[str, PackageDownloader]
 
     @staticmethod
     def all_latest(pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True) -> "HeaderResolver":
-        pkgs = {x: None for x in PackageDownloader.all_pkgs.keys()}
+        pkgs = {x: None for x in PackageDownloader.all_downloaders.keys()}
         return HeaderResolver(pkgs=pkgs, pkg_path=pkg_path, use_cache=use_cache)
 
     def __init__(self, pkgs: Dict[str, Optional[str]], pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True):
         self.pkg_path = pkg_path
         self.pkgs = pkgs
+        self.downloaders = {}
         self._resolve_version()
         # skip if we already has cache
         if use_cache and self._has_cache():
@@ -34,9 +36,10 @@ class HeaderResolver:
     def _resolve_version(self):
         pkgs = {}
         for name, version in self.pkgs.items():
-            if name not in PackageDownloader.all_pkgs:
+            if name not in PackageDownloader.all_downloaders:
                 raise ValueError(f"Unknown package: {name}. Consider make a PR to add it.")
-            downloader = PackageDownloader.all_pkgs[name]
+            downloader = PackageDownloader.all_downloaders[name]()
+            self.downloaders[name] = downloader
             if version is None:
                 pkgs[name] = downloader.get_latest_version()
             else:
@@ -58,7 +61,7 @@ class HeaderResolver:
         # download
         for name, version in self.pkgs.items():
             print(f"Downlad pakcage: {name}, version: {version} ...")
-            PackageDownloader.all_pkgs[name].download(version, self.pkg_path)
+            self.downloaders[name].download(version, self.pkg_path)
         # save to json for the cache
         with open(self.pkg_path / "pkgs.json", "w") as f:
             json.dump(self.pkgs, f, indent=2)
