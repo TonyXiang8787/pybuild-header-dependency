@@ -1,8 +1,10 @@
+import shutil
+import tarfile
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict, List
 
-from .pkg_path import DEFAULT_PKG_PATH
+import requests
 
 
 class PackageDownloader(ABC):
@@ -24,9 +26,21 @@ class PackageDownloader(ABC):
         pass
 
     @abstractmethod
-    def check_version(self, version: str):
+    def all_versions(self) -> List[str]:
         pass
 
     @abstractmethod
-    def download(version: str, base_dir: Path):
+    def download(self, version: str, base_dir: Path):
         pass
+
+    def check_version(self, version: str):
+        if version not in self.all_versions():
+            raise ValueError(f"Unknown version {version} for package {self.name}!")
+
+    def unpack_files(
+        self, response: requests.Response, base_dir: Path, include_base_dir: Path, include_files: List[Path]
+    ):
+        tf = tarfile.open(fileobj=response.raw, mode="r|gz")
+        tf.extractall(base_dir / "pkgs")
+        for file in include_files:
+            shutil.copytree(base_dir / "pkgs" / include_base_dir / file, base_dir / "include" / file)

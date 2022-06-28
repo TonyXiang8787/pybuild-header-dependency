@@ -1,12 +1,12 @@
+import json
+import shutil
 from multiprocessing.sharedctypes import Value
 from pathlib import Path
-import shutil
 from typing import Dict, Optional
-import json
 
+from . import all_pkgs as _
 from .package_downloader import PackageDownloader
 from .pkg_path import DEFAULT_PKG_PATH
-from . import all_pkgs as _
 
 
 class HeaderResolver:
@@ -14,16 +14,16 @@ class HeaderResolver:
     pkgs: Dict[str, Optional[str]]
 
     @staticmethod
-    def all_latest(pkg_path: Path = DEFAULT_PKG_PATH) -> "HeaderResolver":
+    def all_latest(pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True) -> "HeaderResolver":
         pkgs = {x: None for x in PackageDownloader.all_pkgs.keys()}
-        return HeaderResolver(pkgs=pkgs, pkg_path=pkg_path)
+        return HeaderResolver(pkgs=pkgs, pkg_path=pkg_path, use_cache=use_cache)
 
-    def __init__(self, pkgs: Dict[str, Optional[str]], pkg_path: Path = DEFAULT_PKG_PATH):
+    def __init__(self, pkgs: Dict[str, Optional[str]], pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True):
         self.pkg_path = pkg_path
         self.pkgs = pkgs
         self._resolve_version()
         # skip if we already has cache
-        if self._has_cache():
+        if use_cache and self._has_cache():
             pass
         else:
             self._resolve_pkgs()
@@ -55,10 +55,12 @@ class HeaderResolver:
 
     def _resolve_pkgs(self):
         self._create_folder()
-
+        # download
+        for name, version in self.pkgs.items():
+            PackageDownloader.all_pkgs[name].download(version, self.pkg_path)
         # save to json for the cache
         with open(self.pkg_path / "pkgs.json", "w") as f:
-                json.dump(self.pkgs, f, indent=2)
+            json.dump(self.pkgs, f, indent=2)
 
     def _create_folder(self):
         shutil.rmtree(self.pkg_path, ignore_errors=True)
