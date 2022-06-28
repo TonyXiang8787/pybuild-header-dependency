@@ -24,5 +24,9 @@ class PackageDownloader(ABC):
         pass
 
     @abstractmethod
-    def download(version: str, base_dir: Path = DEFAULT_PKG_PATH):
+    def check_version(self, version: str):
+        pass
+
+    @abstractmethod
+    def download(version: str, base_dir: Path):
         pass
