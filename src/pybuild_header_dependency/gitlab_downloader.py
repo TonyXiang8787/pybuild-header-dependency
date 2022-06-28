@@ -1,9 +1,10 @@
-from pathlib import Path
-from .package_downloader import PackageDownloader
-import requests
-from pathlib import Path
-from typing import List, Dict, Any
 import re
+from pathlib import Path
+from typing import Any, Dict, List
+
+import requests
+
+from .package_downloader import PackageDownloader
 
 
 class GitLabDownloader(PackageDownloader):
@@ -20,9 +21,9 @@ class GitLabDownloader(PackageDownloader):
         for release in releases:
             tag = release["tag_name"]
             # strip leading v
-            tag = tag.strip('v')
+            tag = tag.strip("v")
             # skip for versions containing letters
-            if re.search('[a-zA-Z]', tag):
+            if re.search("[a-zA-Z]", tag):
                 continue
             self.releases[tag] = release
         self.all_versions = list(self.releases.keys())
@@ -30,8 +31,8 @@ class GitLabDownloader(PackageDownloader):
     def download(self, version: str, base_dir: Path):
         release = self.releases[version]
         source = [x for x in release["assets"]["sources"] if x["format"] == "tar.gz"][0]
-        url = source['url']
-        file_name = url.split('/')[-1]
+        url = source["url"]
+        file_name = url.split("/")[-1]
         source_dir = file_name.strip(".tar.gz")
         response = requests.get(url, stream=True)
         response.raise_for_status()
