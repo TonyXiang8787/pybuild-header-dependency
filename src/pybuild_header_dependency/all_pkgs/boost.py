@@ -20,7 +20,10 @@ class Boost(PackageDownloader):
         response = requests.get(f"{self.file_base_url}/{version}/source/{file_name}", stream=True)
         response.raise_for_status()
         self.unpack_files(
-            response, base_dir=base_dir, include_base_dir=f"boost_{version_underscore}", include_files=["boost"]
+            response,
+            base_dir=base_dir,
+            include_base_dir=Path(f"boost_{version_underscore}"),
+            include_files=[Path("boost")],
         )
 
     def all_versions(self) -> List[str]:
