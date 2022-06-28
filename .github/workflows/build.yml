@@ -28,13 +28,13 @@ jobs:
         run: pip wheel -v --no-deps -w wheelhouse .
 
       - name: save version
-        id: tag
+        id: version
         run: |
-          echo "::set-output name=tag::v$(cat VERSION)"
+          echo "::set-output name=version::$(cat VERSION)"
 
       - name: test
         run: |
-          pip install pybuild-header-dependency[tests]==${{ steps.tag.outputs.tag }} --find-links=wheelhouse
+          pip install pybuild-header-dependency[tests]==${{ steps.version.outputs.version }} --find-links=wheelhouse
           pytest
       
       - name: Upload wheels
@@ -50,7 +50,7 @@ jobs:
         with:
           files: |
             ./wheelhouse/*.whl
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: v${{ steps.version.outputs.version }}
           prerelease: false
           generate_release_notes: true
           target_commitish: ${{ github.sha }}
