@@ -1,0 +1,13 @@
+[
+    {
+        "name": "eigen",
+        "source": "gitlab",
+        "gitlab_id": 15462818,
+        "include_base_dir": ".",
+        "include_files": ["Eigen"]
+    },
+    {
+        "name": "boost",
+        "source": "custom"
+    }
+]

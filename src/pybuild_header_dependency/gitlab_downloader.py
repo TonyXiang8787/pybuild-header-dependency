@@ -13,7 +13,11 @@ class GitLabDownloader(PackageDownloader):
     include_files: List[Path]
     releases: Dict[str, Any]
 
-    def __init__(self):
+    def __init__(self, gitlab_id: int, include_base_dir: str, include_files: List[str], **_kwargs):
+        self.gitlab_id = gitlab_id
+        self.include_base_dir = Path(include_base_dir)
+        self.include_files = [Path(x) for x in include_files]
+        # retrieve
         response = requests.get(f"https://gitlab.com/api/v4/projects/{self.gitlab_id}/releases")
         response.raise_for_status()
         releases: List[Dict] = response.json()

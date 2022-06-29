@@ -11,18 +11,8 @@ class PackageDownloader(ABC):
     """
     Abstract class to download header-only package
     """
-
-    # name of the package, to be overridden
-    name: str
-    # dict of all packages
-    all_downloaders: Dict[str, Type["PackageDownloader"]] = {}
-
     # all versions, latest at first
     all_versions: List[str]
-
-    def __init_subclass__(cls, **kwargs):
-        if "name" in dir(cls):
-            PackageDownloader.all_downloaders[cls.name] = cls
 
     def get_latest_version(self) -> str:
         return self.all_versions[0]
