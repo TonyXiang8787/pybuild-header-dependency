@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Type
 
 from .custom_sources.boost import Boost
+from .github_downloader import GitHubDownloader
 from .gitlab_downloader import GitLabDownloader
 from .package_downloader import PackageDownloader
 
@@ -31,6 +32,8 @@ def get_downloader(pkg_name: str) -> PackageDownloader:
 
     if meta_data["source"] == "gitlab":
         return GitLabDownloader(**meta_data)
+    elif meta_data["source"] == "github":
+        return GitHubDownloader(**meta_data)
     elif meta_data["source"] == "custom":
         return CUSTOM_PKGS[pkg_name]()
     else:

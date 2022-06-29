@@ -9,5 +9,12 @@
     {
         "name": "boost",
         "source": "custom"
+    },
+    {
+        "name": "nlohmann_json",
+        "source": "github",
+        "repository_name": "nlohmann/json",
+        "include_base_dir": "single_include",
+        "include_files": ["nlohmann"]
     }
 ]
