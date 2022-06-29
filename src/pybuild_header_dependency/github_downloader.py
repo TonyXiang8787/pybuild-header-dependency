@@ -10,7 +10,6 @@ class GitHubDownloader(GitDownloader):
 
     def __init__(self, repository_name: str, **_kwargs):
         super().__init__(**_kwargs)
-
         self.repository_name = repository_name
 
     def release_url(self) -> str:
