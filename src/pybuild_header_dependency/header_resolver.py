@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Dict, Optional
 
 from .package_downloader import PackageDownloader
-from .pkgs import all_pkgs, get_downloader
 from .pkg_path import DEFAULT_PKG_PATH
+from .pkgs import all_pkgs, get_downloader
 
 
 class HeaderResolver:

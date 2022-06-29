@@ -1,5 +1,6 @@
-import requests
 import os
+
+import requests
 
 
 def get_version() -> str:
@@ -55,6 +56,7 @@ def get_new_version(major, minor, latest_major, latest_minor, latest_patch):
             f"latest version: {latest_major}.{latest_minor}.{latest_patch}\n"
             f"to be built version: {major}.{minor}\n"
         )
+
 
 if __name__ == "__main__":
     get_version()
