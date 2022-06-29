@@ -59,7 +59,7 @@ class HeaderResolver:
         self._create_folder()
         # download
         for name, version in self.pkgs.items():
-            print(f"Downlad pakcage: {name}, version: {version} ...")
+            print(f"Download package: {name}, version: {version} ...")
             self.downloaders[name].download(version, self.pkg_path)
         # save to json for the cache
         with open(self.pkg_path / "pkgs.json", "w") as f:
