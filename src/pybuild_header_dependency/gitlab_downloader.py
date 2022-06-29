@@ -36,13 +36,12 @@ class GitLabDownloader(PackageDownloader):
         release = self.releases[version]
         source = [x for x in release["assets"]["sources"] if x["format"] == "tar.gz"][0]
         url = source["url"]
-        file_name = url.split("/")[-1]
-        source_dir = file_name.strip(".tar.gz")
         response = requests.get(url, stream=True)
         response.raise_for_status()
         self.unpack_files(
             response,
+            has_root_dir=True,
             base_dir=base_dir,
-            include_base_dir=source_dir / self.include_base_dir,
+            include_base_dir=self.include_base_dir,
             include_files=self.include_files,
         )

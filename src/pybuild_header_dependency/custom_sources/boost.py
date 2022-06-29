@@ -23,7 +23,8 @@ class Boost(PackageDownloader):
         response.raise_for_status()
         self.unpack_files(
             response,
+            has_root_dir=True,
             base_dir=base_dir,
-            include_base_dir=Path(f"boost_{version_underscore}"),
+            include_base_dir=Path(),
             include_files=[Path("boost")],
         )
