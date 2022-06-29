@@ -17,6 +17,7 @@ class GitDownloader(PackageDownloader):
         super().__init__()
         self.include_base_dir = Path(include_base_dir)
         self.include_files = [Path(x) for x in include_files]
+        self.releases = {}
 
     def get_releases(self):
         # retrieve
