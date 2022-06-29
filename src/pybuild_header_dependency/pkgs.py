@@ -25,7 +25,7 @@ def all_pkgs() -> List[str]:
     return list(_get_all_pkgs().keys())
 
 
-def get_downloader(pkg_name: str) -> PackageDownloader:
+def fetch_downloader(pkg_name: str) -> PackageDownloader:
     if pkg_name not in _get_all_pkgs():
         raise TypeError(f"Unknown package: {pkg_name}. Consider make a PR to add it.")
     meta_data: dict = _get_all_pkgs()[pkg_name]
@@ -38,3 +38,9 @@ def get_downloader(pkg_name: str) -> PackageDownloader:
         return CUSTOM_PKGS[pkg_name]()
     else:
         raise TypeError(f"Unknown source type: {meta_data['source']}")
+
+
+def get_downloader(pkg_name: str) -> PackageDownloader:
+    downloader = fetch_downloader(pkg_name=pkg_name)
+    downloader.get_releases()
+    return downloader

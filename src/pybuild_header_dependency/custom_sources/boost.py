@@ -11,6 +11,9 @@ class Boost(PackageDownloader):
     file_base_url = "https://boostorg.jfrog.io/artifactory/main/release"
 
     def __init__(self):
+        super().__init__()
+
+    def get_releases(self):
         response = requests.get(self.release_url)
         response.raise_for_status()
         self.all_versions = [x["uri"].split("/")[1] for x in response.json()["children"]]

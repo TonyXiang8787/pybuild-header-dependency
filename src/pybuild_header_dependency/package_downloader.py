@@ -2,7 +2,7 @@ import shutil
 import tarfile
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import requests
 
@@ -13,7 +13,10 @@ class PackageDownloader(ABC):
     """
 
     # all versions, latest at first
-    all_versions: List[str]
+    all_versions: Optional[List[str]]
+
+    def __init__(self):
+        self.all_versions = None
 
     def get_latest_version(self) -> str:
         return self.all_versions[0]
@@ -44,4 +47,8 @@ class PackageDownloader(ABC):
 
     @abstractmethod
     def download(self, version: str, base_dir: Path):
+        pass
+
+    @abstractmethod
+    def get_releases(self):
         pass
