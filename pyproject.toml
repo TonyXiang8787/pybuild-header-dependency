@@ -33,6 +33,9 @@ namespaces = false
 [tool.setuptools.dynamic]
 version = {file = "VERSION"}
 
+[tool.setuptools.package-data]
+pybuild_header_dependency = ["*.json"]
+
 
 [tool.black]
 line-length = 120

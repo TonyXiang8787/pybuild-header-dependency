@@ -3,8 +3,8 @@ import shutil
 from pathlib import Path
 from typing import Dict, Optional
 
-from . import all_pkgs as _
 from .package_downloader import PackageDownloader
+from .pkgs import all_pkgs, get_downloader
 from .pkg_path import DEFAULT_PKG_PATH
 
 
@@ -15,7 +15,7 @@ class HeaderResolver:
 
     @staticmethod
     def all_latest(pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True) -> "HeaderResolver":
-        pkgs = {x: None for x in PackageDownloader.all_downloaders.keys()}
+        pkgs = {x: None for x in all_pkgs()}
         return HeaderResolver(pkgs=pkgs, pkg_path=pkg_path, use_cache=use_cache)
 
     def __init__(self, pkgs: Dict[str, Optional[str]], pkg_path: Path = DEFAULT_PKG_PATH, use_cache: bool = True):
@@ -35,9 +35,7 @@ class HeaderResolver:
     def _resolve_version(self):
         pkgs = {}
         for name, version in self.pkgs.items():
-            if name not in PackageDownloader.all_downloaders:
-                raise ValueError(f"Unknown package: {name}. Consider make a PR to add it.")
-            downloader = PackageDownloader.all_downloaders[name]()
+            downloader = get_downloader(name)
             self.downloaders[name] = downloader
             if version is None:
                 pkgs[name] = downloader.get_latest_version()
