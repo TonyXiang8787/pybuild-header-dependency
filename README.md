@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/pybuild-header-dependency.svg)](https://badge.fury.io/py/pybuild-header-dependency)
+[![Build python](https://github.com/TonyXiang8787/pybuild-header-dependency/actions/workflows/build.yml/badge.svg)](https://github.com/TonyXiang8787/pybuild-header-dependency/actions/workflows/build.yml)
+
 # pybuild-header-dependency
 
 `pybuild-header-dependency` is a helper package to resolve C/C++ header-only libraries for Python build with native extensions.
