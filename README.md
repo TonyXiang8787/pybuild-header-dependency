@@ -27,7 +27,22 @@ pip install pybuild-header-dependency
 
 # Usage
 
+The usage below is under the assumption that you develop your project according to [PEP518](https://peps.python.org/pep-0518/) with `pyproject.toml`.
+
 ## Build dependency
+
+Specify `pybuild-header-dependency` as a build dependency in your `pyproject.toml`. It should include something like below:
+
+```toml
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "pybuild-header-dependency"
+    # your other build dependencies
+]
+build-backend = "setuptools.build_meta"
+```
 
 ## Get headers
 
@@ -36,7 +51,7 @@ pip install pybuild-header-dependency
 As the name of this project suggests, this project supports header-only C/C++ libraries.
 If you project depends on some static/dynamic libraries, you need to use a full build system like `cmake`.
 
-The default way of downloading packages from GitLab/GitHub is based on releases.
+The default way of downloading packages from GitLab/GitHub is based on releases. You can of course make a custom downloader.
 
 # License
 
@@ -52,4 +67,4 @@ You are more than welcome to make contributions to this project.
 Please have a look at the [`pkg.json`](src/pybuild_header_dependency/pkgs.json) for 
 some examples about how to add new packages. 
 Also refer to [`boost.py`](src/pybuild_header_dependency/custom_sources/boost.py) for 
-an example of custom sources.
+an example of custom downloader.
