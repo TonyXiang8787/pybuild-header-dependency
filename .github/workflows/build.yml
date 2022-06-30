@@ -28,11 +28,6 @@ jobs:
         run: |
           pip install requests
           python get_version.py
-      
-      - name: modify readme
-        run: |
-          sed -i -r "s@(\[[^\(\)\[\]]+\]\()((?!http)[^\(\)\[\]]+\))@\1https://github.com/TonyXiang8787/pybuild-header-dependency/blob/${GITHUB_SHA}/\2@g" README.md
-
 
       - name: build
         run: pip wheel -v --no-deps -w wheelhouse .
