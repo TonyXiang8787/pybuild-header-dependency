@@ -73,6 +73,18 @@ setup(
 
 ```
 
+You can look at [`pkg.json`](src/pybuild_header_dependency/pkgs.json) for supported header-only libraries.
+
+## Build
+
+Once you configure your project as above, you should be able to build it without any C/C++ packages or packages managers installed. 
+
+```bash
+pip wheel -w dist --no-deps .
+```
+
+The build process will download the necessary header files automatically.
+
 ## Limitation
 
 As the name of this project suggests, this project supports header-only C/C++ libraries.
