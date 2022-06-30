@@ -1,5 +1,6 @@
 # pybuild-header-dependency
-Helper package to resolve C/C++ header-only libraries for Python build with native extensions
+
+`pybuild-header-dependency` is a helper package to resolve C/C++ header-only libraries for Python build with native extensions.
 
 # Why this project?
 
