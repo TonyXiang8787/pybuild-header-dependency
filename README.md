@@ -6,6 +6,12 @@
 
 # Installation
 
+You rarely need to install it manually. If you do, you can directly install it from PyPI:
+
+```bash
+pip install pybuild-header-dependency
+```
+
 # Usage
 
 ## Build dependency
