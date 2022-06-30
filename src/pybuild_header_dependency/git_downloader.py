@@ -29,10 +29,9 @@ class GitDownloader(PackageDownloader):
             tag = release["tag_name"]
             # strip leading v
             tag = tag.strip("v")
-            # skip for versions containing letters
-            if re.search("[a-zA-Z]", tag):
-                continue
-            self.releases[tag] = release
+            # only add official release
+            if self.is_official_release(release):
+                self.releases[tag] = release
         self.all_versions = list(self.releases.keys())
 
     def download(self, version: str, base_dir: Path):
@@ -52,4 +51,8 @@ class GitDownloader(PackageDownloader):
 
     @abstractmethod
     def download_url(self, version: str) -> str:
+        pass
+
+    @abstractmethod
+    def is_official_release(self, release: dict) -> bool:
         pass

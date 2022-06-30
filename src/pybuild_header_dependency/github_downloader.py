@@ -30,3 +30,6 @@ class GitHubDownloader(GitDownloader):
 
     def download_url(self, version: str) -> str:
         return self.releases[version]["tarball_url"]
+
+    def is_official_release(self, release: dict) -> bool:
+        return not release["prerelease"]

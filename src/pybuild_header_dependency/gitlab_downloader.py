@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import requests
+import re
 
 from .git_downloader import GitDownloader
 
@@ -19,3 +19,6 @@ class GitLabDownloader(GitDownloader):
         release = self.releases[version]
         source = [x for x in release["assets"]["sources"] if x["format"] == "tar.gz"][0]
         return source["url"]
+
+    def is_official_release(self, release: dict) -> bool:
+        return not re.search("[a-zA-Z]", release["tag_name"])
