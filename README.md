@@ -14,6 +14,11 @@
 
 ## Limitation
 
+As the name of this project suggests, this project supports header-only C/C++ libraries.
+If you project depends on some static/dynamic libraries, you need to use a full build system like `cmake`.
+
+The default way of downloading packages from GitLab/GitHub is based on releases.
+
 # License
 
 This project is licensed under the BSD-3-Clause license, see [LICENSE](LICENSE) for details.
