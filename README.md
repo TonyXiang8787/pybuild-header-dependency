@@ -39,12 +39,39 @@ requires = [
     "setuptools",
     "wheel",
     "pybuild-header-dependency"
-    # your other build dependencies
+    # your other Python build dependencies
 ]
 build-backend = "setuptools.build_meta"
 ```
 
 ## Get headers
+
+To resolve your needed headers in build time, call `pybuild-header-dependency` in your `setup.py`. See below for some clues:
+
+```python
+from setuptools import Extension
+from setuptools import setup
+from pybuild_header_dependency import HeaderResolver
+
+# resolve your C/C++ header-only dependencies
+resolver = HeaderResolver({
+    "eigen": None,  # None as latest version
+    "boost": "1.78"  # pinned version
+})
+
+# define an extension module
+ext = Extension(
+    include_dirs=[str(resolver.get_include())],
+    # your other extension configurations
+)
+
+# begin build
+setup(
+    ext_modules=[ext],
+    # your other package configurations
+)
+
+```
 
 ## Limitation
 
