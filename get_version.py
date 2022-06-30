@@ -1,5 +1,5 @@
 import os
-
+import re
 import requests
 
 
@@ -58,5 +58,19 @@ def get_new_version(major, minor, latest_major, latest_minor, latest_patch):
         )
 
 
+def convert_long_description():
+    with open("README.md", "r") as f:
+        raw_readme = f.read()
+    if "GITHUB_SHA" not in os.environ:
+        readme = raw_readme
+    else:
+        sha = os.environ["GITHUB_SHA"].lower()
+        url = f"https://github.com/TonyXiang8787/pybuild-header-dependency/blob/{sha}/"
+        readme = re.sub(r"(\[[^\(\)\[\]]+\]\()((?!http)[^\(\)\[\]]+\))", f"\\1{url}\\2", raw_readme)
+    with open("README.md", 'w') as f:
+        f.write(readme)
+
+
 if __name__ == "__main__":
     get_version()
+    convert_long_description()
