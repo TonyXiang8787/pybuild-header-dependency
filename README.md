@@ -7,6 +7,16 @@
 
 # Why this project?
 
+Are you developing a Python project with C/C++ extensions? You are likely to have some dependencies on C/C++ libraries. Managing C/C++ dependencies can be tricky in this case because `setuptools`, the standard build system for Python extension module, does not have a proper package management for C/C++ libraries.
+
+In many cases, your C/C++ dependencies are header-only libraries. You need to then tell `setuptools` the path to the needed header files. Some header-only libraries, e.g. [`pybind11`](https://github.com/pybind/pybind11), are directly installable from PyPI and you can resolve the header location by calling the function `get_include`. This is however not universally applicable for all header-only libraries.
+
+This project is a helper package aiming to facilitate the build process by automatically downloading the needed C/C++ header-only libraries and providing a include path to the build system (`setuptools`).
+
+## Alternatives to this project
+
+[`pybind11`](https://github.com/pybind/pybind11) also provides a way to build C/C++ extensions using full `cmake` build system. In this way, all the C/C++ dependencies can be resolved in `cmake`. Please refer to their [documentation](https://pybind11.readthedocs.io/en/stable/compiling.html#building-with-cmake). This project, however, aims at the developers using `setuptools` to build the extensions.
+
 # Installation
 
 You rarely need to install it manually. If you do, you can directly install it from PyPI:
