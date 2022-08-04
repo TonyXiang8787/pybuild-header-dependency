@@ -14,10 +14,22 @@ class Boost(PackageDownloader):
         super().__init__()
 
     def get_releases(self):
+        self.all_versions = []
         response = requests.get(self.release_url)
         response.raise_for_status()
-        self.all_versions = [x["uri"].split("/")[1] for x in response.json()["children"]]
-        self.all_versions.reverse()
+        # loop all versions
+        children = response.json()["children"]
+        for child in reversed(children):
+            version_uri = child["uri"]
+            # get all files
+            response = requests.get(f"{self.release_url}{version_uri}/source")
+            response.raise_for_status()
+            all_files = [x["uri"] for x in response.json()["children"]]
+            version = version_uri.split("/")[1]
+            # only add to version list if it has official release
+            version_underscore = version.replace(".", "_")
+            if f"/boost_{version_underscore}.tar.gz" in all_files:
+                self.all_versions.append(version)
 
     def download(self, version: str, base_dir: Path):
         version_underscore = version.replace(".", "_")
