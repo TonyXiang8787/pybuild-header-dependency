@@ -12,7 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: BSD License"
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 dependencies = [
     "requests"
 ]
@@ -39,4 +39,4 @@ pybuild_header_dependency = ["*.json"]
 
 [tool.black]
 line-length = 120
-target-version = ['py36']
+target-version = ['py37']
