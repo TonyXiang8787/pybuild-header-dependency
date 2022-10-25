@@ -34,7 +34,7 @@ jobs:
 
       - name: test
         run: |
-          pip install pybuild-header-dependency[tests]==${{ steps.version.outputs.version }} --find-links=wheelhouse
+          pip install pybuild-header-dependency[dev]==${{ steps.version.outputs.version }} --find-links=wheelhouse
           pytest
       
       - name: Upload wheels

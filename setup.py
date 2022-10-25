@@ -1,7 +1,8 @@
-from setuptools import setup
 import os
 import re
+
 import requests
+from setuptools import setup
 
 
 def set_version():
