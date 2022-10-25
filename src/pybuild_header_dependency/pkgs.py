@@ -1,5 +1,4 @@
 import json
-from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Type
 
@@ -11,7 +10,6 @@ from .package_downloader import PackageDownloader
 CUSTOM_PKGS: Dict[str, Type[PackageDownloader]] = {"boost": Boost}
 
 
-@lru_cache
 def _get_all_pkgs() -> Dict[str, Dict[str, Any]]:
     with open(Path(__file__).parent / "pkgs.json", "r") as f:
         pkgs = json.load(f)
@@ -21,14 +19,18 @@ def _get_all_pkgs() -> Dict[str, Dict[str, Any]]:
     return pkgs
 
 
+# load meta data of all packages into memory
+_all_pkgs_meta: Dict[str, Dict[str, Any]] = _get_all_pkgs()
+
+
 def all_pkgs() -> List[str]:
-    return list(_get_all_pkgs().keys())
+    return list(_all_pkgs_meta.keys())
 
 
 def fetch_downloader(pkg_name: str) -> PackageDownloader:
-    if pkg_name not in _get_all_pkgs():
+    if pkg_name not in _all_pkgs_meta:
         raise TypeError(f"Unknown package: {pkg_name}. Consider make a PR to add it.")
-    meta_data: dict = _get_all_pkgs()[pkg_name]
+    meta_data: dict = _all_pkgs_meta[pkg_name]
 
     if meta_data["source"] == "gitlab":
         return GitLabDownloader(**meta_data)
