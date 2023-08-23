@@ -42,7 +42,13 @@ class PackageDownloader(ABC):
         else:
             pkg_dir = tmp_dir
         for file in include_files:
-            shutil.copytree(pkg_dir / include_base_dir / file, base_dir / "include" / file)
+            src = pkg_dir / include_base_dir / file
+            dest = base_dir / "include" / file
+            if src.is_dir():
+                shutil.copytree(src, dest)
+            else:
+                shutil.copyfile(src, dest)
+
         shutil.rmtree(tmp_dir)
 
     @abstractmethod

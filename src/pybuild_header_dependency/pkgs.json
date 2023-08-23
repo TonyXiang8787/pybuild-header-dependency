@@ -16,5 +16,13 @@
         "repository_name": "nlohmann/json",
         "include_base_dir": "single_include",
         "include_files": ["nlohmann"]
+    },
+    {
+        "name": "msgpack-cxx",
+        "source": "github",
+        "repository_name": "msgpack/msgpack-c",
+        "include_base_dir": "include",
+        "include_files": ["msgpack", "msgpack.hpp"],
+        "extra_strip": "cpp-"
     }
 ]

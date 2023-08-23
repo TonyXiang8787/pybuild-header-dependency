@@ -1,7 +1,7 @@
 import re
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -11,12 +11,14 @@ from .package_downloader import PackageDownloader
 class GitDownloader(PackageDownloader):
     include_base_dir: Path
     include_files: List[Path]
+    extra_strip: Optional[str]
     releases: Dict[str, Any]
 
-    def __init__(self, include_base_dir: str, include_files: List[str], **_kwargs):
+    def __init__(self, include_base_dir: str, include_files: List[str], extra_strip=None, **_kwargs):
         super().__init__()
         self.include_base_dir = Path(include_base_dir)
         self.include_files = [Path(x) for x in include_files]
+        self.extra_strip = extra_strip
         self.releases = {}
 
     def get_releases(self):
@@ -29,6 +31,12 @@ class GitDownloader(PackageDownloader):
             tag = release["tag_name"]
             # strip leading v
             tag = tag.strip("v")
+            # extra strip
+            if self.extra_strip is not None:
+                # skip if extra strip is not found
+                if not (tag.startswith(self.extra_strip) or tag.endswith(self.extra_strip)):
+                    continue
+                tag = tag.strip(self.extra_strip).strip()
             # only add official release
             if self.is_official_release(release):
                 self.releases[tag] = release
