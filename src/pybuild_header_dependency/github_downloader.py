@@ -15,19 +15,6 @@ class GitHubDownloader(GitDownloader):
     def release_url(self) -> str:
         return f"https://api.github.com/repos/{self.repository_name}/releases"
 
-    def download(self, version: str, base_dir: Path):
-        release = self.releases[version]
-        url = release["tarball_url"]
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
-        self.unpack_files(
-            response,
-            has_root_dir=True,
-            base_dir=base_dir,
-            include_base_dir=self.include_base_dir,
-            include_files=self.include_files,
-        )
-
     def download_url(self, version: str) -> str:
         return self.releases[version]["tarball_url"]
 
