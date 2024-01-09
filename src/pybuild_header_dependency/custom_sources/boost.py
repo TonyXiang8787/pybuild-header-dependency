@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 import requests
 
@@ -7,8 +8,8 @@ from ..package_downloader import PackageDownloader
 
 class Boost(PackageDownloader):
     name = "boost"
-    release_url = "https://boostorg.jfrog.io/artifactory/api/storage/main/release"
-    file_base_url = "https://boostorg.jfrog.io/artifactory/main/release"
+    release_url = "https://archives.boost.io/release/"
+    file_base_url = "https://archives.boost.io/release"
 
     def __init__(self):
         super().__init__()
@@ -18,17 +19,14 @@ class Boost(PackageDownloader):
         response = requests.get(self.release_url)
         response.raise_for_status()
         # loop all versions
-        children = response.json()["children"]
-        for child in reversed(children):
-            version_uri = child["uri"]
+        versions = re.findall(r"\d+\.\d+\.\d+", response.content.decode(response.encoding))
+        for version in reversed(versions):
             # get all files
-            response = requests.get(f"{self.release_url}{version_uri}/source")
+            response = requests.get(f"{self.release_url}/{version}/source")
             response.raise_for_status()
-            all_files = [x["uri"] for x in response.json()["children"]]
-            version = version_uri.split("/")[1]
-            # only add to version list if it has official release
             version_underscore = version.replace(".", "_")
-            if f"/boost_{version_underscore}.tar.gz" in all_files:
+            # only add to version list if it has official release
+            if re.search(f"boost_{version_underscore}.tar.gz", response.content.decode(response.encoding)):
                 self.all_versions.append(version)
 
     def download(self, version: str, base_dir: Path):
